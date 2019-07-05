@@ -4,6 +4,7 @@
 #include "util.h"
 #include <string.h>
 #include <time.h>
+#include <stdlib.h>
 
 void init_boot_block(FILE* fp){
     char buffer[1024];
@@ -15,7 +16,7 @@ void init_boot_block(FILE* fp){
 
 void init_super_block(int grp_size, int grp_count, int group_id, FILE* fp){
     struct ext2_super_block super_block;
-    #define init_sb(filed, value) (super_block.filed = value);
+    #define init_sb(filed, value) (super_block.filed = value)
     init_sb(s_inodes_count, grp_size / DEFAULT_INDOE_DIVITION * grp_count); /* 每4KB分配一个inode */
     init_sb(s_blocks_count, grp_size * grp_count + 1);     /* 每一个块的大小为1KB */
     init_sb(s_r_blocks_count, DEFAULT_SUPER_USER_REVERVE_SIZE);         /* 为超级用户预留32KB空间 */
@@ -28,7 +29,7 @@ void init_super_block(int grp_size, int grp_count, int group_id, FILE* fp){
     init_sb(s_mtime, time(NULL));
     init_sb(s_wtime, time(NULL));
     init_sb(s_mnt_count, 1);
-    init_sb(s_max_mnt_count,0) // #TODO 2019-07-04 这个是什么意思
+    init_sb(s_max_mnt_count, 0); // #TODO 2019-07-04 这个是什么意思
     init_sb(s_magic, EXT2_SUPER_MAGIC);
     init_sb(s_state, EXT2_VALID_FS);
     init_sb(s_errors, EXT2_ERRORS_DEFAULT);
@@ -49,6 +50,14 @@ void init_super_block(int grp_size, int grp_count, int group_id, FILE* fp){
     // init_sb(s_prealloc_dir_blocks);
     strcpy(super_block.s_volume_name, "myext2");
     strcpy(super_block.s_last_mounted, "/");
+    if(fseek(fp, 1024, SEEK_SET) != 0){
+        if(ferror(fp)){
+            perror("fseek()");
+            exit(1);
+        }
+    }
+    printf("fp -> %d\n", ftell(fp));
+    fwrite(&super_block, sizeof(struct ext2_super_block), 1, fp);
 }
 
 FILE* mkfs(const char* fs_dir , const char* fs_size){
@@ -61,6 +70,6 @@ FILE* mkfs(const char* fs_dir , const char* fs_size){
     //     fwrite(_1M, sizeof(_1M), 1, fs);
     // }
     init_boot_block(fs);
-    struct ext2_super_block superblock;
-    // return fs;
+    init_super_block(to_int(fs_size) * 1024 , 1, 0, fs);
+    return fs;
 }
