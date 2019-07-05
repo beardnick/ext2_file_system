@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<string.h>
 #include "init.h"
+#include <stdlib.h>
 
 /**
  * 程序的入口
@@ -12,16 +13,23 @@
 
 int main(int argc, char const *argv[])
 {
-    FILE *ext2_system;
-    if(argc < 2 ){
-        printf("Usage: \n\tmyext2 <directory of file system> [size of the file system(M)]");
+  struct ext2_file_system fs;
+  // FILE *ext2_system;
+  if (argc < 2)
+  {
+    printf("Usage: \n\tmyext2 <directory of file system> [size of the file system(k)]");
+    exit(1);
     }
-  if(( ext2_system =  fopen(argv[1], "r+b")) == NULL){
+    if ((fs.fs_file = fopen(argv[1], "r+b")) == NULL)
+    {
       if(argc < 3 ){
         printf("文件系统文件不存在，如果要创建文件系统文件，请输入文件系统的大小\nUsage: \n\tmyext2 <directory of file system> [size of the file system(M)]");
-      }else{
-          ext2_system = mkfs(argv[1], argv[2]);
-          printf("%p\n", ext2_system);
+        exit(1);
+      }
+      else
+      {
+        fs = mkfs(argv[1], argv[2]);
+        printf("%p\n", fs.fs_file);
       }
   }
   //   read_cmd();
