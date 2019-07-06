@@ -133,5 +133,5 @@ void init_grp_description(struct ext2_file_system* fs){
 }
 
 void write_origin_data(struct ext2_file_system *fs){
-
+    // 建立根节点文件
 }
