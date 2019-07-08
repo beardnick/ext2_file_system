@@ -2,6 +2,7 @@
 #include<string.h>
 #include "init.h"
 #include <stdlib.h>
+#include "e2fs.h"
 
 /**
  * 程序的入口
@@ -32,6 +33,7 @@ int main(int argc, char const *argv[])
         printf("%p\n", fs.fs_file);
       }
   }
+  
   //   read_cmd();
   return 0;
 }

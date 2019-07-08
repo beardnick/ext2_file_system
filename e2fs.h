@@ -5,6 +5,7 @@
 #include "node.h"
 #include "buffer.h"
 
+
 /*超级块定义 */
 struct ext2_super_block
  {	__u32	s_inodes_count;           /* 文件系统中索引节点总数               */
@@ -73,5 +74,7 @@ struct ext2_group_desc
 	__u16	bg_pad;               /*填充，对齐到字*/
 	__u32   bg_reserved[3];       /*用null填充12个字节*/
 };
+
+struct ext2_file_system global_file_system;
 
 #endif // !2FS_H

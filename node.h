@@ -71,6 +71,6 @@ inode **);
 	int (*smap) (struct inode *,int);
 };
 
-struct ext2_mem_inode get_root_inode();
+struct ext2_mem_inode* get_root_inode();
 
 #endif // !1__NODE_H

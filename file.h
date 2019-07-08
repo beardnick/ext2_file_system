@@ -1,6 +1,7 @@
 #ifndef __FILE_H
 #define __FILE_H
 #include "type.h"
+#include "node.h"
 
 // 定义文件打开后的处理方式
 #define O_RDONLY    1   // 只读
@@ -30,14 +31,27 @@
 #define S_IWOTH 00002
 #define S_IXOTH 00001
 
+
+// #define	__S_IFMT	0170000	/* These bits determine file type.  */
+
+/* File types.  */
+#define	__S_IFDIR	0040000	/* Directory.  */
+#define	__S_IFCHR	0020000	/* Character device.  */
+#define	__S_IFBLK	0060000	/* Block device.  */
+#define	__S_IFREG	0100000	/* Regular file.  */
+#define	__S_IFIFO	0010000	/* FIFO.  */
+#define	__S_IFLNK	0120000	/* Symbolic link.  */
+#define	__S_IFSOCK	0140000	/* Socket.  */
+    
+
 /* 这里全部用的是函数指针，相当于是使用了类似于Java中的接口的特性 */
 struct file_operations {
 	int (*lseek) (struct inode *, struct file *, __u32, int);
 	/**
 	 * inode 文件的inode，一般是内存inode
 	 */
-	int (*read) (struct inode *, struct file *, char *, int);
-	int (*write) (struct inode *, struct file *, const char *, int);
+	int (*read) (struct ext2_mem_inode *, struct file *, char *, int);
+	int (*write) (struct ext2_mem_inode *, struct file *, const char *, int);
 	// int (*readdir) (struct inode *, struct file *, void *, filldir_t);
 	// int (*select) (struct inode *, struct file *, int, select_table *);
 	int (*ioctl) (struct inode *, struct file *, unsigned int, unsigned long);
@@ -50,8 +64,8 @@ struct file_operations {
 	// int (*revalidate) (kdev_t dev);
 };
 
-/* 目录文件 */
- struct ext2_dir_entry_2
+/* 文件项，主要是文件名和inode号 */
+ struct ext2_dir_entry
  {
 	 __le32 inode;   // 文件入口的inode号，0表示该项未使用
 	 __le16 rec_len; // 目录项长度
@@ -59,23 +73,6 @@ struct file_operations {
 	 __u8 file_type; // 文件类型
 	 char name[255]; // 文件名
 };   
-
-
-/* 一个进程当前的根目录和当前目录信息 */
-struct fs_struct {
-	int count;    /* 共享此结构的计数值 */
-	unsigned short umask;  /* 文件掩码 */
-	struct ext2_mem_inode * root, * pwd;  /* 根目录和当前目录inode指针 */
-};
-
-
-/*一个进程打开的所有文件的信息 */
-struct files_struct {
-	int count;    /* 共享该结构的计数值 */
-	// fd_set close_on_exec; 
-	// fd_set open_fds;
-	struct file * fd[NR_OPEN]; /* 打开的文件指针 */
-};
 
 struct file {
 	__u32 f_mode;  /* 文件的打开模式 */
@@ -91,6 +88,18 @@ struct file {
 	void *private_data; /* 指向与文件管理模块有关的私有数据的指针 */
 };
 
+
+/*一个进程打开的所有文件的信息 */
+struct files_struct {
+	int count;    /* 共享此结构的计数值 */
+	unsigned short umask;  /* 文件掩码 */
+	struct ext2_mem_inode *root, * pwd;  /* 根目录和当前目录inode指针 */
+	// fd_set close_on_exec; 
+	// fd_set open_fds;
+	struct file * fd[NR_OPEN]; /* 打开的文件指针 */
+};
+
+
 /* 对普通文件的操作，目录文件也当成普通文件来操作 */
 
 
@@ -99,6 +108,11 @@ struct file* sys_open(const char* filename, int flag, int mode);
 // int sys_write(struct file* fp);
 
 // int sys_read();
+
+/*得到最小的有效的文件描述符 */
+int get_fd(struct files_struct f_struct);
+
+struct files_struct global_files_struct;
 
 
 
