@@ -68,9 +68,9 @@ struct file_operations {
  struct ext2_dir_entry
  {
 	 __le32 inode;   // 文件入口的inode号，0表示该项未使用
-	 __le16 rec_len; // 目录项长度
-	 __u8 name_len;  // 文件名包含的字符数
-	 __u8 file_type; // 文件类型
+	//  __le16 rec_len; // 目录项长度
+	//  __u8 name_len;  // 文件名包含的字符数
+	//  __u8 file_type; // 文件类型
 	 char name[255]; // 文件名
 };   
 

@@ -60,7 +60,7 @@ struct ext2_file_system
 	char blockmap[1024];                    /* 块位图 */
 	struct file * fd[NR_OPEN];              /* 系统打开文件表 */
 	struct ext2_mem_inode itable[NR_INODE]; /*系统打开的inode表 */
-	struct buffer *btable[NR_BUFFER];       /* 系统打开的所有块的表 */
+	struct buffer_head_tail *btable[NR_BUFFER];       /* 系统打开的所有块的表 这里的0为无效的 */
 };
 
 struct ext2_group_desc

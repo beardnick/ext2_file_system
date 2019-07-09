@@ -6,6 +6,8 @@
 #include <string.h>
 #include <time.h>
 #include <stdlib.h>
+#include "node.h"
+#include "file.h"
 
 
 struct ext2_file_system mkfs(const char* fs_dir , const char* fs_size){
@@ -20,6 +22,8 @@ struct ext2_file_system mkfs(const char* fs_dir , const char* fs_size){
     init_bitmap(&fs);
     init_blockmap(&fs);
     init_grp_description(&fs);
+    write_origin_data(&fs);
+    fclose( fs.fs_file);
     return fs;
 }
 
@@ -135,5 +139,23 @@ void init_grp_description(struct ext2_file_system* fs){
 
 void write_origin_data(struct ext2_file_system *fs){
     // 建立根节点文件
-
+    set_bits(fs->fs_file, 1024 * 4 * 8, 2, 1);
+    struct ext2_disk_inode d_inode;
+    d_inode.i_mode = __S_IFDIR;
+    d_inode.i_uid = 0;
+    d_inode.i_time = time(NULL);
+    d_inode.i_gid = 0;
+    d_inode.i_nlinks = 1;
+    struct ext2_dir_entry dirs[2];
+    dirs[0].inode = 1;
+    strcpy(dirs[0].name, ".");
+    dirs[1].inode = 1;
+    strcpy(dirs[1].name, "..");
+    d_inode.i_size = sizeof(dirs);
+    printf("root filersize: %ld\n", d_inode.i_size);
+    d_inode.i_zone[0] = 1;
+    fseek(fs->fs_file, 1024 * 5, SEEK_SET);
+    fwrite(&d_inode, DEFAULT_INODE_SIZE, 1, fs->fs_file);
+    fseek(fs->fs_file, 1024 * 5 + DEFAULT_INODE_SIZE * fs->super_block.s_inodes_count, SEEK_SET);
+    fwrite(&dirs, DEFAULT_PER_BLOCK_SIZE, 1, fs->fs_file);
 }
