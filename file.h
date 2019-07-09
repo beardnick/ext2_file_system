@@ -75,17 +75,17 @@ struct file_operations {
 };   
 
 struct file {
-	__u32 f_mode;  /* 文件的打开模式 */
-	__u32 f_pos;  /* 文件的当前读写位置 */
-	unsigned short f_flags; /* 文件操作标志 */
-	unsigned short f_count; /* 共享该结构体的计数值 */
+	__u32 f_mode;                  /* 文件的打开模式 */
+	__u32 f_pos;                   /* 文件的当前读写位置 */
+	unsigned short f_flags;        /* 文件操作标志 */
+	unsigned short f_count;        /* 共享该结构体的计数值 */
 	unsigned long f_reada, f_ramax, f_raend, f_ralen, f_rawin;
-	struct file *f_next, *f_prev; /* 链接前后节点的指针 */
-	// struct fown_struct f_owner;  /* SIGIO用PID */
-	struct inode * f_inode;  /* 指向文件对应的inode */
+	struct file *f_next, *f_prev;  /* 链接前后节点的指针 */
+	// struct fown_struct f_owner; /* SIGIO用PID */
+	struct ext2_mem_inode * f_inode;        /* 指向文件对应的inode */
 	struct file_operations * f_op; /* 指向文件操作结构体的指针 */
-	unsigned long f_version; /* 文件版本 */
-	void *private_data; /* 指向与文件管理模块有关的私有数据的指针 */
+	unsigned long f_version;       /* 文件版本 */
+	void *private_data;            /* 指向与文件管理模块有关的私有数据的指针 */
 };
 
 
@@ -103,14 +103,14 @@ struct files_struct {
 /* 对普通文件的操作，目录文件也当成普通文件来操作 */
 
 
-struct file* sys_open(const char* filename, int flag, int mode);
+int sys_open(const char* filename, int flag, int mode);
 
-// int sys_write(struct file* fp);
+int sys_write(int fd, char* buf, int count);
 
-// int sys_read();
+int sys_read(int fd, char* buf, int count);
 
 /*得到最小的有效的文件描述符 */
-int get_fd(struct files_struct f_struct);
+int get_fd();
 
 struct files_struct global_files_struct;
 

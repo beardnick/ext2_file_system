@@ -8,5 +8,7 @@ int file_write(struct ext2_mem_inode *inode, struct file *fp, const char *buf, i
 
 int file_read(struct ext2_mem_inode *inode, struct file *fp, char *buf, int count);
 
+int read_disk_block(struct ext2_mem_inode *inode, int block, char *buf);
+
 
 #endif // !

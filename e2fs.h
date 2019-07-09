@@ -59,8 +59,8 @@ struct ext2_file_system
 	char bitmap[1024];                      /* i节点位图 */
 	char blockmap[1024];                    /* 块位图 */
 	struct file * fd[NR_OPEN];              /* 系统打开文件表 */
-	struct ext2_mem_inode itable[NR_INODE]; /*系统打开的inode表 */
-	struct buffer_head_tail *btable[NR_BUFFER];       /* 系统打开的所有块的表 这里的0为无效的 */
+	struct ext2_mem_inode* itable[NR_INODE]; /*系统打开的inode表 */
+	struct buffer_head_tail btable[NR_BUFFER];       /* 系统打开的所有块的表 这里的0为无效的 */
 };
 
 struct ext2_group_desc
@@ -76,5 +76,11 @@ struct ext2_group_desc
 };
 
 struct ext2_file_system global_file_system;
+
+/* 申请一个缓冲区 */
+int get_buffer();
+
+/* 获取缓冲链表上的一个缓冲块 */
+struct buffer_node* get(int buffer_head, int buffer);
 
 #endif // !2FS_H

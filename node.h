@@ -2,7 +2,6 @@
 #define __NODE_H
 
 #include "type.h"
-#include "e2fs.h"
 
 /* 外存索引节点 */
 struct ext2_disk_inode
@@ -43,9 +42,10 @@ struct ext2_mem_inode
 	unsigned char i_seek;				/* 搜寻标志(lseek时) */
 	unsigned char i_update;				/* 更新标志 */
 	int buffer_index;                   /* inode对应文件在buffer中的索引号 */
+	unsigned short i_d_zone[9];         /* i_zone在磁盘上的编号*/
 };
 
-struct m_inode *iget(int number);
+struct ext2_mem_inode *iget(int number);
 
 /*所有的inode的操作方式 */
 struct inode_operations {

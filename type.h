@@ -10,7 +10,6 @@
 #define DEFAULT_SUPER_USER_REVERVE_SIZE 32
 #define DEFAULT_INDOE_DIVITION 1
 #define FIRST_DATA_BLOCK 1
-// #TODO 2019-07-08 NR_OPEN到底是什么
 /* 最多可以打开的文件数 */
 #define NR_OPEN 256
 #define NR_INODE 1024

@@ -56,7 +56,7 @@ void init_super_block(struct ext2_file_system* fs){
     init_sb(s_mtime, time(NULL));
     init_sb(s_wtime, time(NULL));
     init_sb(s_mnt_count, 1);
-    init_sb(s_max_mnt_count, 0); // #TODO 2019-07-04 这个是什么意思
+    init_sb(s_max_mnt_count, 0);
     init_sb(s_magic, EXT2_SUPER_MAGIC);
     init_sb(s_state, EXT2_VALID_FS);
     init_sb(s_errors, EXT2_ERRORS_DEFAULT);
@@ -71,7 +71,6 @@ void init_super_block(struct ext2_file_system* fs){
     init_sb(s_feature_compat, 0);
     init_sb(s_feature_incompat, 0);
 	init_sb(s_feature_ro_compat, 0);
-    // init_sb(s_uuid, ); // #TODO 2019-07-04 UUID怎么生成
     init_sb(s_algorithm_usage_bitmap, 0);
     // init_sb(s_prealloc_blocks);
     // init_sb(s_prealloc_dir_blocks);

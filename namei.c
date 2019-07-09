@@ -31,7 +31,7 @@ struct ext2_mem_inode* namei(const char *filename, struct ext2_mem_inode *root){
     // namei("./path/to/file")
     // namei("/path/to/file")
     // namei("path/to/file")
-    // #TODO 2019-07-09 namei("/")的情况
+    // namei("/")
     for (int i = 0; i < path_len; i++)
     {
         if(path[i] == '/' || path[i] == '\0'){
