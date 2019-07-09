@@ -60,6 +60,7 @@ struct ext2_mem_inode* namei(const char *filename, struct ext2_mem_inode *root){
                     printf("%s\n",sub_files[j].name);
                 if(strcmp(sub_files[j].name, path+ start) == 0){
                     current = iget(sub_files[j].inode);
+                    break;
                 }
             }
             start = i + 1;

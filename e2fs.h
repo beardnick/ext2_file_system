@@ -80,6 +80,12 @@ struct ext2_file_system global_file_system;
 /* 申请一个缓冲区 */
 int get_buffer();
 
+/*获取空闲的盘块号 */
+int get_free_disk_block();
+
+/*获取空闲的inode号 */
+int get_free_disk_inode();
+
 /* 获取缓冲链表上的一个缓冲块 */
 struct buffer_node* get(int buffer_head, int buffer);
 

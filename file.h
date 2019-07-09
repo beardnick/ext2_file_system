@@ -114,6 +114,8 @@ int get_fd();
 
 struct files_struct global_files_struct;
 
+/* 创建文件 */
+int create(char* path , char* filename, int filetype);
 
 
 #endif // !FILE_H

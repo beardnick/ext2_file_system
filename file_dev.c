@@ -24,6 +24,7 @@ int file_write(struct ext2_mem_inode *inode, struct file *fp, const char *buf, i
         struct buffer_node* new_node =  get(inode->buffer_index, block_index);
         memcpy(new_node->data, buf, DEFAULT_PER_BLOCK_SIZE);
         new_node->block = inode->i_d_zone[block_index];
+        inode->i_zone[block_index] = block_index;
         write_count += DEFAULT_PER_BLOCK_SIZE;
         block_index++;
     }

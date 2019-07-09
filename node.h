@@ -3,6 +3,8 @@
 
 #include "type.h"
 
+#define I_ZONE_SIZE 9
+
 /* 外存索引节点 */
 struct ext2_disk_inode
 {	
@@ -36,8 +38,7 @@ struct ext2_mem_inode
 	unsigned short i_num;				/* i节点号 inode在磁盘上的编号*/
 	unsigned short i_count;				/* i节点被使用的次数，0表示该i节点空闲 */
 	unsigned char i_lock;				/* 锁定标志 */
-	unsigned char i_dirt;				/* 已修改(脏)标志 */
-	unsigned char i_pipe;				/* 管道标志 */
+	unsigned char i_dirt;				/* 已修改(脏)标志 */ unsigned char i_pipe;				/* 管道标志 */
 	unsigned char i_mount;				/* 安装标志 */
 	unsigned char i_seek;				/* 搜寻标志(lseek时) */
 	unsigned char i_update;				/* 更新标志 */
@@ -73,5 +74,9 @@ inode **);
 };
 
 struct ext2_mem_inode* get_root_inode();
+
+struct ext2_disk_inode to_disk(struct ext2_mem_inode m_node);
+
+struct ext2_mem_inode to_mem(struct ext2_disk_inode d_node);
 
 #endif // !1__NODE_H
