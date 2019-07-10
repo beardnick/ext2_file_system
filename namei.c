@@ -20,7 +20,9 @@ int get_subfiles(struct ext2_mem_inode* parent, struct ext2_dir_entry sub_files[
 
 /* 通过路径来查找文件 */
 struct ext2_mem_inode* namei(const char *filename, struct ext2_mem_inode *root){
-    if(root == NULL){
+    printf("搜索文件%s\n", filename);
+    if (root == NULL)
+    {
         root = get_root_inode();
     }
     struct ext2_mem_inode *current = root;

@@ -101,7 +101,7 @@ void init_bitmap(struct ext2_file_system* fs){
         base = (1 << base);
     }
     memset(_1K + size, target, 1);
-    _1K[0] = 0xFE;
+    _1K[0] = 0x01;
     if(fseek(fs->fs_file, 1024 * 5, SEEK_SET) != 0){
         perror("init_bitmap fseek()");
         exit(1);
@@ -109,6 +109,7 @@ void init_bitmap(struct ext2_file_system* fs){
         printf("fp -> %d\n", ftell(fs->fs_file));
     }
     fwrite(_1K, 1024, 1,fs->fs_file);
+    memcpy(fs->bitmap, _1K, 1024);
     free(_1K);
 }
 
@@ -125,7 +126,7 @@ void init_blockmap(struct ext2_file_system* fs){
         base = (1 << base);
     }
     memset(_1K + size, target, 1);
-    _1K[0] = 0xFE;
+    _1K[0] = 0x01;
     fseek(fs->fs_file, 1024 * 4, SEEK_SET);
     fwrite(_1K, 1024, 1, fs->fs_file);
     free(_1K);
@@ -151,9 +152,9 @@ void write_origin_data(struct ext2_file_system *fs){
     dirs[1].inode = 1;
     strcpy(dirs[1].name, "..");
     d_inode.i_size = sizeof(dirs);
-    printf("root filersize: %ld\n", d_inode.i_size);
+    printf("root filesize: %ld\n", d_inode.i_size);
     d_inode.i_zone[0] = 1;
-    fseek(fs->fs_file, 1024 * 5, SEEK_SET);
+    fseek(fs->fs_file, 1024 * 5 + DEFAULT_INODE_SIZE * 1 , SEEK_SET);
     fwrite(&d_inode, DEFAULT_INODE_SIZE, 1, fs->fs_file);
     fseek(fs->fs_file, 1024 * 5 + DEFAULT_INODE_SIZE * fs->super_block.s_inodes_count, SEEK_SET);
     fwrite(&dirs, DEFAULT_PER_BLOCK_SIZE, 1, fs->fs_file);

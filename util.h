@@ -10,4 +10,6 @@ char *get_1K1();
 
 void set_bits(FILE *fp, int offset, int number, char tag);
 
+void print_bit(char c);
+
 #endif //  __UTIL_H

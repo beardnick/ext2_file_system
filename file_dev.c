@@ -16,6 +16,7 @@ int read_disk_block(struct ext2_mem_inode* inode , int block, char* buf){
 }
 
 int file_write(struct ext2_mem_inode *inode, struct file *fp, const char *buf, int count){
+    printf("写inode %d\n", inode->i_num);
     int write_count = 0;
     while (write_count < count)
     {

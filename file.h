@@ -44,25 +44,6 @@
 #define	__S_IFSOCK	0140000	/* Socket.  */
     
 
-/* 这里全部用的是函数指针，相当于是使用了类似于Java中的接口的特性 */
-struct file_operations {
-	int (*lseek) (struct inode *, struct file *, __u32, int);
-	/**
-	 * inode 文件的inode，一般是内存inode
-	 */
-	int (*read) (struct ext2_mem_inode *, struct file *, char *, int);
-	int (*write) (struct ext2_mem_inode *, struct file *, const char *, int);
-	// int (*readdir) (struct inode *, struct file *, void *, filldir_t);
-	// int (*select) (struct inode *, struct file *, int, select_table *);
-	int (*ioctl) (struct inode *, struct file *, unsigned int, unsigned long);
-	int (*mmap) (struct inode *, struct file *, struct vm_area_struct *);
-	int (*open) (struct inode *, struct file *);
-	void (*release) (struct inode *, struct file *);
-	int (*fsync) (struct inode *, struct file *);
-	int (*fasync) (struct inode *, struct file *, int);
-	// int (*check_media_change) (kdev_t dev);
-	// int (*revalidate) (kdev_t dev);
-};
 
 /* 文件项，主要是文件名和inode号 */
  struct ext2_dir_entry
@@ -97,6 +78,26 @@ struct files_struct {
 	// fd_set close_on_exec; 
 	// fd_set open_fds;
 	struct file * fd[NR_OPEN]; /* 打开的文件指针 */
+};
+
+/* 这里全部用的是函数指针，相当于是使用了类似于Java中的接口的特性 */
+struct file_operations {
+	int (*lseek) (struct ext2_mem_inode *, struct file *, __u32, int);
+	/**
+	 * inode 文件的inode，一般是内存inode
+	 */
+	int (*read) (struct ext2_mem_inode *, struct file *, char *, int);
+	int (*write) (struct ext2_mem_inode *, struct file *, const char *, int);
+	// int (*readdir) (struct inode *, struct file *, void *, filldir_t);
+	// int (*select) (struct inode *, struct file *, int, select_table *);
+	int (*ioctl) (struct ext2_mem_inode *, struct file *, unsigned int, unsigned long);
+	int (*mmap) (struct ext2_mem_inode *, struct file *, struct vm_area_struct *);
+	int (*open) (struct ext2_mem_inode *, struct file *);
+	void (*release) (struct ext2_mem_inode *, struct file *);
+	int (*fsync) (struct ext2_mem_inode *, struct file *);
+	int (*fasync) (struct ext2_mem_inode *, struct file *, int);
+	// int (*check_media_change) (kdev_t dev);
+	// int (*revalidate) (kdev_t dev);
 };
 
 

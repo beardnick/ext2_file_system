@@ -3,6 +3,7 @@
 #include "init.h"
 #include <stdlib.h>
 #include "e2fs.h"
+#include "file.h"
 
 /**
  * 程序的入口
@@ -30,10 +31,28 @@ int main(int argc, char const *argv[])
       else
       {
         fs = mkfs(argv[1], argv[2]);
-        printf("%p\n", fs.fs_file);
+        global_file_system = fs;
+        global_file_system.fs_file = fopen(argv[1], "r+");
+        printf("%p\n", global_file_system.fs_file);
+        create("/", "root", __S_IFDIR);
+        create("/root", "test", __S_IFREG);
       }
+  }else{
+    printf("加载已存在的文件系统\n");
   }
-  
+
   //   read_cmd();
   return 0;
 }
+
+// int main(int argc, char const *argv[])
+// {
+//         struct ext2_file_system fs = mkfs("test.ext2", "32");
+//         global_file_system = fs;
+//         global_file_system.fs_file = fopen("test.ext2", "r+");
+//         printf("%p\n", global_file_system.fs_file);
+//         create("/", "root", __S_IFDIR);
+//         create("/root", "test", __S_IFREG);
+//   return 0;
+// }
+

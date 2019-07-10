@@ -5,13 +5,13 @@ OBJS=$(addprefix obj/, $(addsuffix .o , $(BASE)))
 
 $(TARGET):$(OBJS)
 	rm -f $(TARGET)
-	gcc -o $(TARGET) $(OBJS)
+	gcc -fno-stack-protector -g  -o $(TARGET) $(OBJS)
 
 obj/%.o:%.c
 	@if test ! -e obj; then\
 	    mkdir obj;\
 	fi;
-	gcc -c -o $@ $<
+	gcc -fno-stack-protector -g -c -o $@ $<
 
 clean:
 	rm -f obj/*.o

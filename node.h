@@ -51,26 +51,26 @@ struct ext2_mem_inode *iget(int number);
 /*所有的inode的操作方式 */
 struct inode_operations {
 	struct file_operations * default_file_ops;
-	int (*create) (struct inode *,const char *,int,int,struct inode 
+	int (*create) (struct ext2_mem_inode *,const char *,int,int,struct ext2_mem_inode 
 **);
-	int (*lookup) (struct inode *,const char *,int,struct inode **);
-	int (*link) (struct inode *,struct inode *,const char *,int);
-	int (*unlink) (struct inode *,const char *,int);
-	int (*symlink) (struct inode *,const char *,int,const char *);
-	int (*mkdir) (struct inode *,const char *,int,int);
-	int (*rmdir) (struct inode *,const char *,int);
-	int (*mknod) (struct inode *,const char *,int,int,int);
-	int (*rename) (struct inode *,const char *,int,struct inode 
+	int (*lookup) (struct ext2_mem_inode *,const char *,int,struct ext2_mem_inode **);
+	int (*link) (struct ext2_mem_inode *,struct ext2_mem_inode *,const char *,int);
+	int (*unlink) (struct ext2_mem_inode *,const char *,int);
+	int (*symlink) (struct ext2_mem_inode *,const char *,int,const char *);
+	int (*mkdir) (struct ext2_mem_inode *,const char *,int,int);
+	int (*rmdir) (struct ext2_mem_inode *,const char *,int);
+	int (*mknod) (struct ext2_mem_inode *,const char *,int,int,int);
+	int (*rename) (struct ext2_mem_inode *,const char *,int,struct ext2_mem_inode 
 *,const char *,int, int);
-	int (*readlink) (struct inode *,char *,int);
-	int (*follow_link) (struct inode *,struct inode *,int,int,struct 
-inode **);
-	int (*readpage) (struct inode *, struct page *);
-	int (*writepage) (struct inode *, struct page *);
-	int (*bmap) (struct inode *,int);
-	void (*truncate) (struct inode *);
-	int (*permission) (struct inode *, int);
-	int (*smap) (struct inode *,int);
+	int (*readlink) (struct ext2_mem_inode *,char *,int);
+	int (*follow_link) (struct ext2_mem_inode *,struct ext2_mem_inode *,int,int,struct 
+ext2_mem_inode **);
+	int (*readpage) (struct ext2_mem_inode *, struct page *);
+	int (*writepage) (struct ext2_mem_inode *, struct page *);
+	int (*bmap) (struct ext2_mem_inode *,int);
+	void (*truncate) (struct ext2_mem_inode *);
+	int (*permission) (struct ext2_mem_inode *, int);
+	int (*smap) (struct ext2_mem_inode *,int);
 };
 
 struct ext2_mem_inode* get_root_inode();

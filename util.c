@@ -50,3 +50,16 @@ void set_bits(FILE *fp, int offset, int number, char tag){
     fseek(fp, offset / 8, SEEK_SET);
     fwrite(buf, number, 1, fp);
 }
+
+void print_bit(char c){
+    int base = 1;
+    for (int i = 0; i < 8; i++)
+    {
+        if((base & c) == 0){
+            printf("0");
+        }else{
+            printf("1");
+        }
+        base <<= 1;
+    }
+}

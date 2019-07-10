@@ -3,11 +3,14 @@
 #include <stdlib.h>
 #include "type.h"
 #include "node.h"
+#include "util.h"
 
 int get_buffer(){
-    for (int i = 1; i < NR_BUFFER ; i++)
+    printf("get_buffer\n");
+    for (int i = 1; i < NR_BUFFER; i++)
     {
         if(global_file_system.btable[i].head == NULL){
+            printf("得到了buffer %d\n", i);
             return i;
         }
     }
@@ -34,6 +37,7 @@ struct buffer_node* get(int buffer_head, int buffer){
 }
 
 int get_free_disk_block(){
+
     char* map = global_file_system.blockmap;
     char base = 1;
     for (int i = 0; i < 1024; i++)
@@ -52,7 +56,16 @@ int get_free_disk_block(){
 }
 
 int get_free_disk_inode(){
-    char* map = global_file_system.bitmap;
+    printf("get_free_disk_inode()\n");
+    for (int i = 0; i < 1024; i++)
+    {
+        print_bit(global_file_system.bitmap[i]);
+        if((i + 1) % 16 == 0){
+            printf("\n");
+        }
+    }
+
+    char *map = global_file_system.bitmap;
     char base = 1;
     for (int i = 0; i < 1024; i++)
     {
@@ -60,6 +73,7 @@ int get_free_disk_inode(){
             for (int j=0; j < 8; j++)
             {
                 if((base & map[i]) == 0){
+                    printf("得到了空闲的inode %d\n", j + i * 8);
                     return j + i * 8;
                 }
                 base <<= 1;
