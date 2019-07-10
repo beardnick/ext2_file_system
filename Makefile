@@ -1,4 +1,4 @@
-TARGET=myext2
+TARGET=a.out
 C_FILES=$(shell ls *.c)
 BASE=$(basename $(C_FILES))
 OBJS=$(addprefix obj/, $(addsuffix .o , $(BASE)))

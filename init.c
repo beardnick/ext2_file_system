@@ -23,7 +23,6 @@ struct ext2_file_system mkfs(const char* fs_dir , const char* fs_size){
     init_blockmap(&fs);
     init_grp_description(&fs);
     write_origin_data(&fs);
-    fclose( fs.fs_file);
     return fs;
 }
 
@@ -141,6 +140,7 @@ void write_origin_data(struct ext2_file_system *fs){
     // 建立根节点文件
     set_bits(fs->fs_file, 1024 * 4 * 8, 2, 1);
     struct ext2_disk_inode d_inode;
+    memset(&d_inode, 0, sizeof(struct ext2_disk_inode));
     d_inode.i_mode = __S_IFDIR;
     d_inode.i_uid = 0;
     d_inode.i_time = time(NULL);
@@ -155,6 +155,7 @@ void write_origin_data(struct ext2_file_system *fs){
     printf("root filesize: %ld\n", d_inode.i_size);
     d_inode.i_zone[0] = 1;
     fseek(fs->fs_file, 1024 * 5 + DEFAULT_INODE_SIZE * 1 , SEEK_SET);
+    printf("init fseek 成功 %ld\n", ftell(fs->fs_file));
     fwrite(&d_inode, DEFAULT_INODE_SIZE, 1, fs->fs_file);
     fseek(fs->fs_file, 1024 * 5 + DEFAULT_INODE_SIZE * fs->super_block.s_inodes_count, SEEK_SET);
     fwrite(&dirs, DEFAULT_PER_BLOCK_SIZE, 1, fs->fs_file);

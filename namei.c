@@ -10,8 +10,10 @@
 int get_subfiles(struct ext2_mem_inode* parent, struct ext2_dir_entry sub_files[]){
            int file_cnt = parent->i_size / sizeof(struct ext2_dir_entry);
             struct file *fp = (struct file *) malloc(sizeof(struct file));
+            memset(fp, 0, sizeof(struct file));
             fp->f_pos = 0;
             sub_files = (struct ext2_dir_entry *) malloc(file_cnt * sizeof(struct ext2_dir_entry));
+            memset(sub_files, 0, sizeof(struct ext2_dir_entry));
             char buf[file_cnt];
             file_read(parent, fp, buf, parent->i_size);
             memcpy(sub_files, buf, parent->i_size);

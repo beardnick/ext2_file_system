@@ -4,6 +4,7 @@
 #include <stdlib.h>
 #include "e2fs.h"
 #include <string.h>
+#include "file.h"
 
 int read_disk_block(struct ext2_mem_inode* inode , int block, char* buf){
     fseek(global_file_system.fs_file,
@@ -42,6 +43,7 @@ int file_read(struct ext2_mem_inode *inode, struct file *fp, char *buf, int coun
         if(inode->i_zone[block_index] == 0){
             // char *buf = (char *) malloc(DEFAULT_PER_BLOCK_SIZE);
             struct buffer_node* bnode = (struct buffer_node *) malloc(sizeof(struct buffer_node));
+            memset(bnode, 0, sizeof(struct buffer_node));
             read_disk_block(inode, block_index, bnode->data);
             bnode->block = inode->i_d_zone[block_index];
             global_file_system.btable[inode->buffer_index].tail->next = bnode;

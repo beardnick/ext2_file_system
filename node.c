@@ -17,15 +17,16 @@ struct ext2_mem_inode *iget(int number){
         return global_file_system.itable[number];
     }
     struct ext2_mem_inode* m_node = (struct ext2_mem_inode *) malloc(sizeof(struct ext2_mem_inode));
+    memset(m_node, 0, sizeof(struct ext2_mem_inode));
     struct ext2_disk_inode d_node;
     printf("文件系统 %p\n", global_file_system.fs_file);
     fflush(global_file_system.fs_file);
     if (fseek(global_file_system.fs_file, 1024 * 5 + number * DEFAULT_INODE_SIZE, SEEK_SET) == 0)
     {
-        printf("fseek成功, %ld\n", ftell(global_file_system.fs_file));
+        printf("node fseek成功, %ld\n", ftell(global_file_system.fs_file));
     }
     printf("fseek\n");
-    fread(&d_node,DEFAULT_INODE_SIZE,1,global_file_system.fs_file);
+    fread(&d_node,sizeof(struct ext2_disk_inode),1,global_file_system.fs_file);
     printf("fread\n");
     m_node->i_mode = d_node.i_mode;
     // printf("i_mode %d\n", m_node->i_mode);
